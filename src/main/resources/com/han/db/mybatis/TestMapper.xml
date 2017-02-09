@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="testMapper">
+	<sql id="selectTestListWhere">
+		WHERE 1=1
+		<if test='searchType != null and searchType == "title"'>
+			AND TEST_TITLE LIKE CONCAT('%', #{searchText}, '%')
+		</if>
+		<if test='searchType != null and searchType == "contents"'>
+			AND TEST_CONTENTS LIKE CONCAT('%', #{searchText}, '%')
+		</if>
+	</sql>
+	<select id="selectTestListCnt" resultType="int">
+		SELECT COUNT(*) FROM TEST
+		<include refid="selectTestListWhere" />
+	</select>
+	<select id="selectTestList" resultType="testVo">
+		SELECT * FROM TEST
+		<include refid="selectTestListWhere" />
+	</select>
+	<select id="selectTestInfo" resultType="testVo">
+		SELECT * FROM TEST WHERE TEST_NO = #{test_no}
+	</select>
+	<update id="updateTestCnt">
+		UPDATE TEST SET TEST_CNT = TEST_CNT + 1 WHERE TEST_NO = #{test_no}
+	</update>
+</mapper>
